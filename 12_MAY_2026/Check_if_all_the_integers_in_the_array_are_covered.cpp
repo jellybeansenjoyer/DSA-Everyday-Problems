@@ -1,28 +1,23 @@
 #include<bits/stdc++.h>
 using namespace std;
 bool isCovered(vector<vector<int>>& ranges, int left, int right) {
-    sort(ranges.begin(),ranges.end(),[](vector<int>& a, vector<int>& b){        
-        return a[0] < b[0]; 
-    });
-
-
-    int cnt=0;
-    int n = ranges.size();
-    int i = left;
-    while(cnt<n && i<=right){
-
-        int l = ranges[cnt][0];
-        int r = ranges[cnt][1];
-        // cout<<l<<" "<<r<<endl;
-        if(i>=l && i<=r){
-            i++;
-        }else{
-            cnt++;
+    vector<int> arr(51,0);
+    for(auto range: ranges){
+        int start = range[0];
+        int end = range[1];
+        arr[start]+=1;
+        if(end+1<arr.size() && end+1>=0)
+            arr[end+1]-=1;
+    }
+    int sum =0;
+    for(int i=0;i<=50;i++){
+        sum+=arr[i];
+        if(i>=left && i<=right && sum<=0){
+            return false;
         }
     }
-    
-    return i>right;
-}   
+    return true;
+}  
 int main(){
     vector<vector<int>> ranges = {{1,2},{3,4},{5,6}};
     int left = 2;
